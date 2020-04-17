@@ -3,18 +3,12 @@ const cors = require("cors");
 
 const { uuid } = require("uuidv4");
 
-const deleteSpace = require("./util/deleteSpace");
-
 const app = express();
 
 app.use(express.json());
 app.use(cors());
 
 const repositories = [];
-
-app.get("/repositories", (req, res) => {
-  return res.json(repositories);
-});
 
 app.post("/repositories", (req, res) => {
   const { title, url, techs } = req.body;
@@ -23,13 +17,17 @@ app.post("/repositories", (req, res) => {
     id: uuid(),
     title,
     url,
-    techs: deleteSpace(techs),
+    techs,
     likes: 0,
   };
 
   repositories.push(newRepo);
 
   return res.json(newRepo);
+});
+
+app.get("/repositories", (req, res) => {
+  return res.json(repositories);
 });
 
 app.put("/repositories/:id", (req, res) => {
